@@ -20,9 +20,9 @@ Alternatives considered during architectural analysis. Each entry records the op
 
 ---
 
-## Trigger Mechanism: Webhooks vs Label Polling
+## Trigger Mechanism: Event-Driven vs Label Polling
 
-**Chosen**: GitHub webhook events (`issues.labeled`).
+**Chosen**: Event-driven via the `IssueEventSource` abstraction, with two concrete implementations: `GithubWebhookSource` (GitHub webhook delivery of `issues.labeled` events) and `QueueEventSource` (message queue). The deployment operator configures which source to use; business logic is identical for both.
 
 **Alternatives considered:**
 
@@ -131,4 +131,4 @@ Alternatives considered during architectural analysis. Each entry records the op
 | **Markdown with section headings** (chosen) | Natural for document synthesis; LLMs produce consistent headings; human-readable raw output | Section heading parsing is slightly fragile; requires heading normalisation |
 | XML-tagged sections | Unambiguous delimiters | Verbose; LLMs sometimes close tags incorrectly |
 
-**Tradeoffs accepted**: Section parsing is based on heading text matching. The prompt specifies exact heading strings; the parser must handle minor whitespace variation. A malformed response that cannot be parsed into all six sections is treated as `LlmError::MalformedResponse` — no partial assessment is posted.
+**Tradeoffs accepted**: Section parsing is based on heading text matching. The prompt specifies exact heading strings; the parser must handle minor whitespace variation. A malformed response that cannot be parsed into all six sections is treated as `AssessmentEngineError::MalformedResponse` — no partial assessment is posted.

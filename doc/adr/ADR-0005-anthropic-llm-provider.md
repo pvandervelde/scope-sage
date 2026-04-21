@@ -33,7 +33,7 @@ Scope Sage does not use any LLM framework (LangChain, LlamaIndex, etc.) — it c
 
 - **Self-hosted open-weight model (Llama 3, Mistral, etc.)**: eliminates third-party API dependency and data sharing; significantly worse quality for complex architectural synthesis tasks at the token counts involved; requires GPU infrastructure that is not currently available internally. Rejected for the initial version — may be reconsidered if infrastructure becomes available.
 
-- **Multiple providers with routing / fallback**: improves resilience against single-provider outage; significantly increases prompt engineering complexity (consistent output format across providers); increases operational complexity. Deferred — the `LlmPort` abstraction allows this to be introduced without changing business logic.
+- **Multiple providers with routing / fallback**: improves resilience against single-provider outage; significantly increases prompt engineering complexity (consistent output format across providers); increases operational complexity. Deferred — the `AssessmentEngine` abstraction allows this to be introduced without changing business logic.
 
 - **LLM framework (LangChain/LlamaIndex in Rust, e.g. `llm-chain`)**: abstracts provider; adds dependency churn risk as these crates are young; hides the API call details that matter for auditability. Rejected — direct API calls are more transparent and auditable.
 

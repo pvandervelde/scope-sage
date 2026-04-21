@@ -150,7 +150,7 @@ Rotation procedure:
 
 1. Generate a new Ed25519 key pair; compute its `key-id`.
 2. Add the new `key-id → public_key` entry to the key registries in GateKeeper and CogWorks. Do **not** remove the old entry yet.
-3. Update the private key in the secrets store.
+3. Update the private key in the secrets store, replacing (and revoking) the old private key. After this step the old private key must not be recoverable from the secrets store.
 4. Redeploy Scope Sage with the new key.
 5. New assessments are signed with the new key and `key-id`. Old assessments signed with the old `key-id` remain verifiable as long as the old entry is in the registry.
 6. After a retention window (e.g. 30 days), remove the old `key-id` from downstream registries.
