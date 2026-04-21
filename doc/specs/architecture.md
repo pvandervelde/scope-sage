@@ -103,9 +103,9 @@ Trait abstractions that isolate business logic from external systems. Each trait
 ### `IssueTracker`
 
 ```
-fetch_issue(issue_ref: IssueRef) -> Result<Issue, GithubError>
-find_assessment_comment(issue_ref: IssueRef) -> Result<Option<CommentId>, GithubError>
-post_comment(issue_ref: IssueRef, body: String) -> Result<CommentId, GithubError>
+async fn fetch_issue(issue_ref: IssueRef) -> Result<Issue, GithubError>
+async fn find_assessment_comment(issue_ref: IssueRef) -> Result<Option<CommentId>, GithubError>
+async fn post_comment(issue_ref: IssueRef, body: String) -> Result<CommentId, GithubError>
 ```
 
 ### `IssueEventSource`
@@ -119,7 +119,7 @@ Abstraction over the event transport. Implementations emit `LabelEvent`s (a labe
 ### `DocumentRepository`
 
 ```
-load_documents(sources: Vec<DocumentSource>) -> Vec<LoadResult>
+async fn load_documents(sources: Vec<DocumentSource>) -> Vec<LoadResult>
 ```
 
 Returns a `LoadResult` per source — either document content or a `DocumentLoadError`. Never fails the entire call on a single source failure.
@@ -127,7 +127,7 @@ Returns a `LoadResult` per source — either document content or a `DocumentLoad
 ### `AssessmentEngine`
 
 ```
-synthesise(context: LlmContext) -> Result<AssessmentSections, AssessmentEngineError>
+async fn synthesise(context: LlmContext) -> Result<AssessmentSections, AssessmentEngineError>
 ```
 
 Implementations handle retries internally up to a configured limit. Returns `AssessmentEngineError` if all retries fail.
@@ -135,7 +135,7 @@ Implementations handle retries internally up to a configured limit. Returns `Ass
 ### `SigningKeyStore`
 
 ```
-signing_key() -> Result<SigningKey, SigningKeyStoreError>
+async fn signing_key() -> Result<SigningKey, SigningKeyStoreError>
 ```
 
 Returns a `SigningKey` containing the Ed25519 private key and the `key-id` derived from the corresponding public key. Called at the start of each signing operation. Private key material must never be cloned or stored beyond the signing operation.
@@ -143,7 +143,7 @@ Returns a `SigningKey` containing the Ed25519 private key and the `key-id` deriv
 ### `AuditLog`
 
 ```
-record(event: AuditRecord) -> Result<(), AuditError>
+async fn record(event: AuditRecord) -> Result<(), AuditError>
 ```
 
 Must not be called with a fire-and-forget pattern. If the write fails, the error must be logged (even if it cannot be surfaced further).
@@ -151,7 +151,7 @@ Must not be called with a fire-and-forget pattern. If the write fails, the error
 ### `FailureNotifier`
 
 ```
-notify_failure(issue_ref: IssueRef, summary: String) -> Result<(), FailureNotifierError>
+async fn notify_failure(issue_ref: IssueRef, summary: String) -> Result<(), FailureNotifierError>
 ```
 
 ---
