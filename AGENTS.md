@@ -43,7 +43,7 @@ Before implementing features, verify:
 
 1. **Read Specifications**: Check doc/specs/ for relevant documentation
 2. Read [doc/specs/constraints.md](doc/specs/constraints.md) (implementation rules and tripwires)
-3. Read [doc/specs/requirements.md](doc/specs/requirements.md) (what must be true — use to confirm scope before adding code)
+3. Read [doc/specs/assertions.md](doc/specs/assertions.md) (what must be true — use to confirm scope before adding code)
 4. Read relevant standards in [doc/standards/](doc/standards/) (language/domain specific; may be empty early in the project)
 5. **Search Existing Code**: Use semantic_search to find similar implementations
 6. **Check Module Structure**: Determine if code belongs in existing module or needs new one
