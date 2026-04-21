@@ -61,12 +61,13 @@ Testable assertions about system behaviour. Each assertion follows Given/When/Th
 - **Then**: HTTP 400 is returned
 - **And**: An audit record is written with the parse error
 
-### ASSERT-005b: Queue message with non-design label is silently discarded
+### ASSERT-005b: Malformed queue message does not emit a LabelEvent
 
-- **Given**: A queue message received by `QueueEventSource` where the label is not `state:design`
-- **When**: `EventRouter` processes the `LabelEvent`
-- **Then**: No assessment cycle begins
-- **And**: An audit record is written recording receipt and discard reason
+- **Given**: A queue message received by `QueueEventSource` that cannot be deserialised into a valid `LabelEvent` (e.g. missing required fields, wrong JSON schema)
+- **When**: `QueueEventSource` attempts to process the message
+- **Then**: No `LabelEvent` is emitted
+- **And**: An `EventSourceError` is returned to the caller (EventRouter)
+- **And**: An audit record is written with the parse error detail
 
 ---
 
@@ -197,4 +198,5 @@ Testable assertions about system behaviour. Each assertion follows Given/When/Th
 
 - **Given**: A successful assessment cycle
 - **When**: The audit log is examined
-- **Then**: There is a record of the LLM call including: model name, prompt token count, completion token count, latency, and outcome
+- **Then**: The single `AuditRecord` produced by ASSERT-019 contains nested LLM call fields: model name, prompt token count, completion token count, latency, and outcome
+- **Note**: This is a nested field within the single top-level `AuditRecord` per cycle (see ASSERT-019 and constraints.md Architecture Constraint 4). A separate top-level `AuditRecord` per LLM call would violate that constraint.
